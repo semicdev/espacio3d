@@ -251,11 +251,99 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var targetPosition = this.target,
 			position = this.object.position;
 
-		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
+		/*targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
 		targetPosition.y = position.y + 100 * Math.cos( this.phi );
 		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+*/
+	
 
-		this.object.lookAt( targetPosition );
+console.log(targetPosition);
+
+		//GAMEPAD
+		if (Gamepad.supported) 
+		{
+			
+			var pads = Gamepad.getStates();
+	        var pad = pads[0]; // assume only 1 player.
+//console.log(pad);
+	        if (pad) 
+			{
+				//console.log(pad);
+				// reset to original position
+				if ( pad.start || pad.select )
+				{
+					console.log("start");
+				}
+				if(pad.faceButton0){
+					console.log("faceButton0");
+					this.moveForward = true;
+				}else{
+					this.moveForward = false;
+				}	
+				if(pad.dpadUp){
+					this.moveForward = true;
+				}else{
+					this.moveForward = false;
+				}
+				if(pad.dpadDown){
+					this.moveBackward = true;
+				}else{
+					this.moveBackward = false;
+				}
+				if(pad.dpadRight){
+					this.moveRight = true;
+				}else{
+					this.moveRight = false;
+				}
+				if(pad.dpadLeft){
+					this.moveLeft = true;
+				}else{
+					this.moveLeft = false;
+				}
+				//left stick
+				if(pad.leftStickX > 0.2){
+					this.moveRight = true;
+				}else{
+					this.moveRight = false;
+				}
+				if(pad.leftStickX < -0.2){
+					this.moveLeft = true;
+				}else{
+					this.moveLeft = false;
+				}
+
+				if(pad.leftStickY < -0.2){
+					this.moveForward = true;
+				}else{
+					this.moveForward = false;
+				}
+				if(pad.leftStickY > 0.2){
+					this.moveBackward = true;
+				}else{
+					this.moveBackward = false;
+				}
+					//right stick
+				if(pad.rightStickY > 0.2){
+					targetPosition.y -=5;
+					console.log(targetPosition.y);
+				}
+				if(pad.rightStickY < -0.2){
+					targetPosition.y +=5;
+					console.log(targetPosition.y);
+				}
+				if(pad.rightStickX > 0.2){
+					targetPosition.z -=5;
+					console.log(targetPosition.z);
+				}
+				if(pad.rightStickX < -0.2){
+					targetPosition.z +=5;
+					console.log(targetPosition.z);
+				}					
+
+	        }
+		}
+
+			this.object.lookAt( targetPosition );
 
 	};
 
